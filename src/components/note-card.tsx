@@ -43,7 +43,7 @@ export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
               })}
             </span>
 
-            <p className='text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh]'>
+            <p className='text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh] h-[calc(100vh-120px)]'>
               {note.content}
             </p>
           </div>
