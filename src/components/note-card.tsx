@@ -19,10 +19,10 @@ interface NoteCardProps {
 
 export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
   function compartilharNoWhatsApp() {
-    let textoCompartilhado = `*|Tipo: ${note.typeNote} |* \n\nNota: ${note.content}`;
+    let textoCompartilhado = `*| [Tipo] : ${note.typeNote} |* \n\nNota: ${note.content}`;
 
     if (note.typeNote === 'Tarefa') {
-      textoCompartilhado = `*|Prioridade: ${note.priority} |* \n${textoCompartilhado}`;
+      textoCompartilhado = `*| [Prioridade] : ${note.priority} |* \n${textoCompartilhado}`;
     }
 
     window.open(
@@ -73,29 +73,31 @@ export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
 
       <Dialog.Portal>
         <Dialog.Overlay className='inset-0 fixed bg-black/60' />
-        <Dialog.Content className='fixed inset-0 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-[640px] w-full md:h-[60vh] bg-slate-700 md:rounded-md flex flex-col'>
+        <Dialog.Content className='fixed overflow-hidden inset-0 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-[640px] w-full bg-slate-700 md:rounded-md flex flex-col '>
           <Dialog.Close className='absolute right-0 top-0 bg-slate-800 p-1.5 text-slate-400 hover:text-slate-100'>
             <X className='size-5' />
           </Dialog.Close>
           <div className='flex flex-1 flex-col gap-3 p-5'>
-            <span className='text-sm font-medium text-slate-300'>
-              {formatDistanceToNow(note.date, {
-                locale: ptBR,
-                addSuffix: true,
-              })}
-            </span>
-            {note.typeNote === 'Tarefa' && (
-              <div className='flex gap-2'>
-                <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
-                  {note.typeNote}
-                </span>
-                <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
-                  Prioridade: {note.priority}
-                </span>
-              </div>
-            )}
+            <div className='flex gap-6 place-items-center'>
+              <span className='text-sm font-medium text-slate-300'>
+                {formatDistanceToNow(note.date, {
+                  locale: ptBR,
+                  addSuffix: true,
+                })}
+              </span>
+              {note.typeNote === 'Tarefa' && (
+                <div className='flex gap-2'>
+                  <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
+                    {note.typeNote}
+                  </span>
+                  <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
+                    Prioridade: {note.priority}
+                  </span>
+                </div>
+              )}
+            </div>
 
-            <p className='text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh] h-[calc(100vh-120px)]'>
+            <p className='text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh] max-h-[75vh]'>
               {note.content}
             </p>
           </div>
