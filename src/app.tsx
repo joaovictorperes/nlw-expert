@@ -8,6 +8,8 @@ interface Note {
   id: string;
   date: Date;
   content: string;
+  typeNote: string;
+  priority?: string;
 }
 
 export function App() {
@@ -22,11 +24,13 @@ export function App() {
     return [];
   });
 
-  function onNoteCreated(content: string) {
+  function onNoteCreated(content: string, typeNote: string, priority?: string) {
     const newNote = {
       id: crypto.randomUUID(),
       date: new Date(),
       content,
+      typeNote,
+      priority,
     };
 
     const notesArray = [newNote, ...notes];
@@ -64,7 +68,6 @@ export function App() {
   return (
     <div className='mx-auto max-w-6xl my-10 space-y-6 px-5'>
       <img src={logo} alt='NLW Expert' />
-
       <form className='w-full'>
         <input
           type='text'
@@ -74,9 +77,7 @@ export function App() {
           onChange={handleSearch}
         />
       </form>
-
       <div className='h-px bg-slate-700' />
-
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[250px]'>
         <NewNoteCard onNoteCreated={onNoteCreated} />
 

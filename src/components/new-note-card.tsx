@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { toast } from 'sonner';
 
 interface NewNoteCardProps {
-  onNoteCreated: (content: string) => void;
+  onNoteCreated: (content: string, typeNote: string, priority: string) => void;
 }
 
 let SpeechRecognition: SpeechRecognition | null = null;
@@ -13,6 +13,8 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
   const [shouldShowOnboarding, setshouldShowOnboarding] = useState(true);
   const [isRecording, setIsRecording] = useState(false);
   const [content, setContent] = useState('');
+  const [shouldShowNotePriority, setShouldShowNotePriority] = useState(false);
+  const [priority, setPriority] = useState('Média');
 
   function handleStartEditor() {
     setshouldShowOnboarding(false);
@@ -28,13 +30,18 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
 
   function handleSaveNote(event: FormEvent) {
     event.preventDefault();
+    let typeNote;
 
     if (content === '') {
       toast.error('Nota não criada, Por favor, preencha o conteúdo.');
       return;
     }
 
-    onNoteCreated(content);
+    shouldShowNotePriority
+      ? (typeNote = 'Tarefa')
+      : (typeNote = 'Nota Simples');
+
+    onNoteCreated(content, typeNote, priority);
 
     setContent('');
     setshouldShowOnboarding(true);
@@ -87,6 +94,16 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
     }
   }
 
+  function handleNoteTypeChange(event: ChangeEvent<HTMLSelectElement>) {
+    event.target.value === 'Tarefa'
+      ? setShouldShowNotePriority(true)
+      : setShouldShowNotePriority(false);
+  }
+
+  function handleChangePriority(event: ChangeEvent<HTMLSelectElement>) {
+    setPriority(event.target.value);
+  }
+
   return (
     <Dialog.Root>
       <Dialog.Trigger className='rounded-md flex flex-col bg-slate-700 text-left p-5 space-y-3 outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'>
@@ -133,12 +150,67 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
                   .
                 </p>
               ) : (
-                <textarea
-                  autoFocus
-                  className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none'
-                  onChange={handleContentChanged}
-                  value={content}
-                />
+                <div>
+                  <div className='flex gap-5 mb-4'>
+                    <select
+                      defaultValue='Nota Simples'
+                      className='text-slate-100 rounded-md bg-slate-500 p-1 outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400 box-border'
+                      name='tipoNota'
+                      id='tipoNota'
+                      onChange={handleNoteTypeChange}
+                    >
+                      <option
+                        className='text-slate-200 bg-slate-700 border-none'
+                        value='Nota Simples'
+                      >
+                        Nota Simples
+                      </option>
+                      <option
+                        className='text-slate-200 bg-slate-700 border-none'
+                        value='Tarefa'
+                      >
+                        Tarefa
+                      </option>
+                    </select>
+
+                    {shouldShowNotePriority && (
+                      <select
+                        defaultValue='Média'
+                        className='text-slate-200 rounded-md bg-transparent outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'
+                        name='prioridade'
+                        id='prioridade'
+                        onChange={handleChangePriority}
+                      >
+                        <option
+                          className='text-slate-200 bg-slate-700 border-none'
+                          value='Baixa'
+                        >
+                          Baixa
+                        </option>
+                        <option
+                          className='text-slate-200 bg-slate-700 border-none'
+                          value='Média'
+                        >
+                          Média
+                        </option>
+                        <option
+                          className='text-slate-200 bg-slate-700 border-none'
+                          value='Alta'
+                        >
+                          Alta
+                        </option>
+                      </select>
+                    )}
+                  </div>
+
+                  <textarea
+                    autoFocus
+                    className='text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none'
+                    placeholder='Escreva uma nota...'
+                    onChange={handleContentChanged}
+                    value={content}
+                  />
+                </div>
               )}
             </div>
 

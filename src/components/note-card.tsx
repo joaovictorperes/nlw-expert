@@ -3,16 +3,35 @@ import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { X } from 'lucide-react';
 
+//Teste
+import { WhatsappShareButton, WhatsappIcon } from 'react-share';
+
 interface NoteCardProps {
   note: {
     id: string;
     date: Date;
     content: string;
+    typeNote: string;
+    priority?: string;
   };
   onNoteDeleted: (id: string) => void;
 }
 
 export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
+  function compartilharNoWhatsApp() {
+    let textoCompartilhado = `*|Tipo: ${note.typeNote} |* \n\nNota: ${note.content}`;
+
+    if (note.typeNote === 'Tarefa') {
+      textoCompartilhado = `*|Prioridade: ${note.priority} |* \n${textoCompartilhado}`;
+    }
+
+    window.open(
+      `https://web.whatsapp.com/send?text=${encodeURIComponent(
+        textoCompartilhado
+      )}`
+    );
+  }
+
   return (
     <Dialog.Root>
       <Dialog.Trigger className='text-left rounded-md flex flex-col bg-slate-800 p-5 gap-3 overflow-hidden relative outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'>
@@ -22,6 +41,29 @@ export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
             addSuffix: true,
           })}
         </span>
+        <div className='absolute right-2 top-2'>
+          <button onClick={compartilharNoWhatsApp}>
+            <WhatsappShareButton
+              url=''
+              title='Compartilhar no WhatsApp'
+              separator=':: '
+              className=' hover:ring-2 hover:ring-green-300 rounded-full focus-visible:ring-1'
+            >
+              <WhatsappIcon size={26} round />
+            </WhatsappShareButton>
+          </button>
+        </div>
+        {note.typeNote === 'Tarefa' && (
+          <div className='flex gap-2'>
+            <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
+              {note.typeNote}
+            </span>
+            <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
+              Prioridade: {note.priority}
+            </span>
+          </div>
+        )}
+
         <p className='text-sm leading-6 text-slate-400 break-all overflow-y-auto'>
           {note.content}
         </p>
@@ -42,6 +84,16 @@ export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
                 addSuffix: true,
               })}
             </span>
+            {note.typeNote === 'Tarefa' && (
+              <div className='flex gap-2'>
+                <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
+                  {note.typeNote}
+                </span>
+                <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
+                  Prioridade: {note.priority}
+                </span>
+              </div>
+            )}
 
             <p className='text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh] h-[calc(100vh-120px)]'>
               {note.content}
