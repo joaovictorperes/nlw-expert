@@ -58,6 +58,30 @@ export function App() {
     setSearch(query);
   }
 
+  function onNoteEdited(
+    id: string,
+    newContent: string,
+    newTypeNote: string,
+    newPriority?: string
+  ) {
+    const updatedNotes = notes.map((note) => {
+      if (note.id === id) {
+        return {
+          ...note,
+          content: newContent,
+          typeNote: newTypeNote,
+          priority: newPriority,
+        };
+      }
+      return note;
+    });
+
+    setNotes(updatedNotes);
+    localStorage.setItem('notes', JSON.stringify(updatedNotes));
+
+    toast.success('Nota editada!');
+  }
+
   const filteredNotes =
     search !== ''
       ? notes.filter((note) =>
@@ -83,7 +107,12 @@ export function App() {
 
         {filteredNotes.map((note) => {
           return (
-            <NoteCard key={note.id} note={note} onNoteDeleted={onNoteDeleted} />
+            <NoteCard
+              key={note.id}
+              note={note}
+              onNoteDeleted={onNoteDeleted}
+              onNoteEdited={onNoteEdited}
+            />
           );
         })}
       </div>

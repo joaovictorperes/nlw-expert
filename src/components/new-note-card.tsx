@@ -104,6 +104,11 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
     setPriority(event.target.value);
   }
 
+  function handleResetText() {
+    setContent(' ');
+    setshouldShowOnboarding(true);
+  }
+
   return (
     <Dialog.Root>
       <Dialog.Trigger className='rounded-md flex flex-col bg-slate-700 text-left p-5 space-y-3 outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'>
@@ -151,56 +156,64 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
                 </p>
               ) : (
                 <div>
-                  <div className='flex gap-5 mb-4'>
-                    <select
-                      defaultValue='Nota Simples'
-                      className='text-slate-100 rounded-md bg-slate-500 p-1 outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400 box-border'
-                      name='tipoNota'
-                      id='tipoNota'
-                      onChange={handleNoteTypeChange}
-                    >
-                      <option
-                        className='text-slate-200 bg-slate-700 border-none'
-                        value='Nota Simples'
-                      >
-                        Nota Simples
-                      </option>
-                      <option
-                        className='text-slate-200 bg-slate-700 border-none'
-                        value='Tarefa'
-                      >
-                        Tarefa
-                      </option>
-                    </select>
-
-                    {shouldShowNotePriority && (
+                  <div className='flex mb-4 justify-between'>
+                    <div className='flex gap-5'>
                       <select
-                        defaultValue='Média'
-                        className='text-slate-200 rounded-md bg-transparent outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'
-                        name='prioridade'
-                        id='prioridade'
-                        onChange={handleChangePriority}
+                        defaultValue='Nota Simples'
+                        className='text-slate-100 rounded-md bg-slate-500 p-1 outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400 box-border'
+                        name='tipoNota'
+                        id='tipoNota'
+                        onChange={handleNoteTypeChange}
                       >
                         <option
                           className='text-slate-200 bg-slate-700 border-none'
-                          value='Baixa'
+                          value='Nota Simples'
                         >
-                          Baixa
+                          Nota Simples
                         </option>
                         <option
                           className='text-slate-200 bg-slate-700 border-none'
-                          value='Média'
+                          value='Tarefa'
                         >
-                          Média
-                        </option>
-                        <option
-                          className='text-slate-200 bg-slate-700 border-none'
-                          value='Alta'
-                        >
-                          Alta
+                          Tarefa
                         </option>
                       </select>
-                    )}
+
+                      {shouldShowNotePriority && (
+                        <select
+                          defaultValue='Média'
+                          className='text-slate-200 rounded-md bg-transparent outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'
+                          name='prioridade'
+                          id='prioridade'
+                          onChange={handleChangePriority}
+                        >
+                          <option
+                            className='text-slate-200 bg-slate-700 border-none'
+                            value='Baixa'
+                          >
+                            Baixa
+                          </option>
+                          <option
+                            className='text-slate-200 bg-slate-700 border-none'
+                            value='Média'
+                          >
+                            Média
+                          </option>
+                          <option
+                            className='text-slate-200 bg-slate-700 border-none'
+                            value='Alta'
+                          >
+                            Alta
+                          </option>
+                        </select>
+                      )}
+                    </div>
+                    <button
+                      className='bg-slate-600 p-1 rounded-md text-sm outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'
+                      onClick={handleResetText}
+                    >
+                      Limpar
+                    </button>
                   </div>
 
                   <textarea

@@ -1,9 +1,9 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { X } from 'lucide-react';
+import { X, Pencil, Undo2 } from 'lucide-react';
+import { ChangeEvent, useState } from 'react';
 
-//Teste
 import { WhatsappShareButton, WhatsappIcon } from 'react-share';
 
 interface NoteCardProps {
@@ -15,10 +15,46 @@ interface NoteCardProps {
     priority?: string;
   };
   onNoteDeleted: (id: string) => void;
+  onNoteEdited: (
+    id: string,
+    newContent: string,
+    newTypeNote: string,
+    newPriority?: string
+  ) => void;
 }
 
-export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
-  function compartilharNoWhatsApp() {
+export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [newContent, setNewContent] = useState(note.content);
+  const [newTypeNote, setNewTypeNote] = useState(note.typeNote);
+  const [newPriority, setNewPriority] = useState(note.priority);
+
+  const [shouldShowNotePriority, setShouldShowNotePriority] = useState(
+    note.typeNote === 'Tarefa' ? true : false
+  );
+
+  function handleEditNote() {
+    setIsEditing(true);
+  }
+
+  function handleSaveEdit() {
+    setIsEditing(false);
+    onNoteEdited(note.id, newContent, newTypeNote, newPriority);
+  }
+
+  function handleNoteTypeChange(event: ChangeEvent<HTMLSelectElement>) {
+    event.target.value === 'Tarefa'
+      ? setShouldShowNotePriority(true)
+      : setShouldShowNotePriority(false);
+
+    setNewTypeNote(event.target.value);
+  }
+
+  function handleChangePriority(event: ChangeEvent<HTMLSelectElement>) {
+    setNewPriority(event.target.value);
+  }
+
+  function shareOnWhatsApp() {
     let textoCompartilhado = `*| [Tipo] : ${note.typeNote} |* \n\nNota: ${note.content}`;
 
     if (note.typeNote === 'Tarefa') {
@@ -42,7 +78,7 @@ export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
           })}
         </span>
         <div className='absolute right-2 top-2'>
-          <button onClick={compartilharNoWhatsApp}>
+          <button onClick={shareOnWhatsApp}>
             <WhatsappShareButton
               url=''
               title='Compartilhar no WhatsApp'
@@ -53,16 +89,16 @@ export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
             </WhatsappShareButton>
           </button>
         </div>
-        {note.typeNote === 'Tarefa' && (
-          <div className='flex gap-2'>
-            <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
-              {note.typeNote}
-            </span>
+        <div className='flex gap-2'>
+          <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
+            {note.typeNote}
+          </span>
+          {note.typeNote === 'Tarefa' && (
             <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
               Prioridade: {note.priority}
             </span>
-          </div>
-        )}
+          )}
+        </div>
 
         <p className='text-sm leading-6 text-slate-400 break-all overflow-y-auto'>
           {note.content}
@@ -85,33 +121,123 @@ export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
                   addSuffix: true,
                 })}
               </span>
-              {note.typeNote === 'Tarefa' && (
-                <div className='flex gap-2'>
-                  <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
-                    {note.typeNote}
-                  </span>
-                  <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
-                    Prioridade: {note.priority}
-                  </span>
-                </div>
+              {!isEditing ? (
+                <>
+                  <Pencil
+                    className='size-7 bg-slate-800 p-0.5 text-slate-400 hover:text-slate-100 cursor-pointer rounded-md'
+                    onClick={handleEditNote}
+                  />
+                  <div className='flex gap-2'>
+                    <span className='text-gray-200 text-sm bg-slate-500 p-1 px-2 rounded-md'>
+                      {note.typeNote}
+                    </span>
+                    {note.typeNote === 'Tarefa' && (
+                      <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
+                        Prioridade: {note.priority}
+                      </span>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Undo2
+                    className='size-7 bg-slate-800 p-0.5 text-slate-400 hover:text-slate-100 cursor-pointer rounded-md'
+                    onClick={() => setIsEditing(false)}
+                  />
+                  {
+                    <div className='flex gap-4'>
+                      <select
+                        defaultValue={note.typeNote}
+                        className='text-gray-50 text-sm bg-slate-500 p-1 rounded-md 
+                       outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'
+                        name='tipoNota'
+                        id='tipoNota'
+                        onChange={handleNoteTypeChange}
+                      >
+                        <option
+                          className='text-slate-200 bg-slate-700 border-none'
+                          value='Nota Simples'
+                        >
+                          Nota Simples
+                        </option>
+                        <option
+                          className='text-slate-200 bg-slate-700 border-none'
+                          value='Tarefa'
+                        >
+                          Tarefa
+                        </option>
+                      </select>
+
+                      {shouldShowNotePriority && (
+                        <select
+                          defaultValue={note.priority}
+                          className='text-gray-100 text-sm bg-slate-500 rounded-md bg-transparent outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'
+                          name='prioridade'
+                          id='prioridade'
+                          onChange={handleChangePriority}
+                        >
+                          <option
+                            className='text-slate-200 bg-slate-700 border-none'
+                            value='Baixa'
+                          >
+                            Baixa
+                          </option>
+                          <option
+                            className='text-slate-200 bg-slate-700 border-none'
+                            value='Média'
+                          >
+                            Média
+                          </option>
+                          <option
+                            className='text-slate-200 bg-slate-700 border-none'
+                            value='Alta'
+                          >
+                            Alta
+                          </option>
+                        </select>
+                      )}
+                    </div>
+                  }
+                </>
               )}
             </div>
 
-            <p className='text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh] max-h-[75vh]'>
-              {note.content}
-            </p>
+            {isEditing ? (
+              <textarea
+                className='text-sm leading-6 text-slate-400 bg-transparent resize-none outline-none break-all overflow-y-scroll md:h-[40vh] max-h-[75vh]'
+                value={newContent}
+                onChange={(e) => setNewContent(e.target.value)}
+              />
+            ) : (
+              <p className='text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh] max-h-[75vh]'>
+                {note.content}
+              </p>
+            )}
           </div>
 
-          <button
-            type='button'
-            onClick={() => onNoteDeleted(note.id)}
-            className='w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium group'
-          >
-            Deseja{' '}
-            <span className='text-red-400 group-hover:underline'>
-              apagar essa nota?
-            </span>
-          </button>
+          {isEditing ? (
+            <button
+              type='button'
+              onClick={handleSaveEdit}
+              className='w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium group'
+            >
+              Deseja{' '}
+              <span className='text-green-400 group-hover:underline'>
+                salvar a edição?
+              </span>
+            </button>
+          ) : (
+            <button
+              type='button'
+              onClick={() => onNoteDeleted(note.id)}
+              className='w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium group'
+            >
+              Deseja{' '}
+              <span className='text-red-400 group-hover:underline'>
+                apagar essa nota?
+              </span>
+            </button>
+          )}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
