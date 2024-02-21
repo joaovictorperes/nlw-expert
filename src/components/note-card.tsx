@@ -103,7 +103,7 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
           )}
         </div>
 
-        <p className='text-sm leading-6 text-slate-400 break-all overflow-y-auto'>
+        <p className='whitespace-pre-line text-sm leading-6 text-slate-400 break-all overflow-y-auto'>
           {note.content}
         </p>
 
@@ -125,24 +125,22 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
                 })}
               </span>
               {!isEditing ? (
-                <>
+                <div className='flex gap-2'>
                   <Pencil
                     className='size-7 bg-slate-800 p-0.5 text-slate-400 hover:text-slate-100 cursor-pointer rounded-md'
                     onClick={handleEditNote}
                   />
-                  <div className='flex gap-2'>
-                    <span className='text-gray-200 text-sm bg-slate-500 p-1 px-2 rounded-md'>
-                      {note.typeNote}
+                  <span className='text-gray-200 text-sm bg-slate-500 p-1 px-2 rounded-md'>
+                    {note.typeNote}
+                  </span>
+                  {note.typeNote === 'Tarefa' && (
+                    <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
+                      {note.priority}
                     </span>
-                    {note.typeNote === 'Tarefa' && (
-                      <span className='text-gray-200 text-sm bg-slate-500 p-1 rounded-md'>
-                        Prioridade: {note.priority}
-                      </span>
-                    )}
-                  </div>
-                </>
+                  )}
+                </div>
               ) : (
-                <>
+                <div className='flex gap-2'>
                   <Undo2
                     className='size-7 bg-slate-800 p-0.5 text-slate-400 hover:text-slate-100 cursor-pointer rounded-md'
                     onClick={() => setIsEditing(false)}
@@ -151,7 +149,7 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
                     <div className='flex gap-4'>
                       <select
                         defaultValue={note.typeNote}
-                        className='text-gray-50 text-sm bg-slate-500 p-1 rounded-md 
+                        className='text-gray-50 text-sm w-[90px] bg-slate-500 p-1 rounded-md 
                        outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'
                         name='tipoNota'
                         id='tipoNota'
@@ -201,18 +199,18 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
                       )}
                     </div>
                   }
-                </>
+                </div>
               )}
             </div>
 
             {isEditing ? (
               <textarea
-                className='text-sm leading-6 text-slate-400 bg-transparent resize-none outline-none break-all overflow-y-scroll md:h-[40vh] max-h-[75vh]'
+                className='text-sm leading-6 text-slate-400 bg-transparent resize-none outline-none break-all overflow-y-scroll md:h-[40vh] max-h-[75vh] flex-1'
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
               />
             ) : (
-              <p className='text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh] max-h-[75vh]'>
+              <p className='whitespace-pre-line text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh] max-h-[75vh]'>
                 {note.content}
               </p>
             )}

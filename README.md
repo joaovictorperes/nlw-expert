@@ -38,4 +38,4 @@ No momento é possível criar as notas de duas formas: digitando texto ou gravan
 
 ## Resultado
 
-O aplicativo Notas App também está disponível online, clicando [aqui](https://nlw-expert-notes-app.vercel.app/) você o resultado pode ser conferido.
+O aplicativo Notas App também está disponível online, clicando [aqui](https://nlw-expert-notes-app.vercel.app/) o resultado pode ser conferido.
