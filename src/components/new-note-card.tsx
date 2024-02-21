@@ -4,7 +4,12 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { toast } from 'sonner';
 
 interface NewNoteCardProps {
-  onNoteCreated: (content: string, typeNote: string, priority: string) => void;
+  onNoteCreated: (
+    content: string,
+    typeNote: string,
+    priority: string,
+    imageUrl: string
+  ) => void;
 }
 
 let SpeechRecognition: SpeechRecognition | null = null;
@@ -15,6 +20,7 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
   const [content, setContent] = useState('');
   const [shouldShowNotePriority, setShouldShowNotePriority] = useState(false);
   const [priority, setPriority] = useState('Média');
+  const [imageUrl, setImageUrl] = useState('');
 
   function handleStartEditor() {
     setshouldShowOnboarding(false);
@@ -41,7 +47,7 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
       ? (typeNote = 'Tarefa')
       : (typeNote = 'Nota Simples');
 
-    onNoteCreated(content, typeNote, priority);
+    onNoteCreated(content, typeNote, priority, imageUrl);
 
     setContent('');
     setshouldShowOnboarding(true);
@@ -107,6 +113,13 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
   function handleResetText() {
     setContent(' ');
     setshouldShowOnboarding(true);
+  }
+
+  function handleFileUpload(event: ChangeEvent<any>) {
+    const file = event.target.files[0];
+    const fileUrl = URL.createObjectURL(file);
+
+    setImageUrl(fileUrl);
   }
 
   return (
@@ -223,6 +236,32 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
                     onChange={handleContentChanged}
                     value={content}
                   />
+
+                  <div className='flex gap-2 items-center'>
+                    <label
+                      htmlFor='fileInput'
+                      className='bg-slate-600 p-1 rounded-md text-sm outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400 cursor-pointer'
+                    >
+                      Selecione uma imagem
+                    </label>
+                    <input
+                      className='hidden'
+                      type='file'
+                      id='fileInput'
+                      accept='image/*'
+                      onChange={handleFileUpload}
+                    />
+                    {imageUrl && (
+                      <a href={imageUrl} target='_blank'>
+                        <img
+                          id='previewImage'
+                          src={imageUrl}
+                          alt='Prévia da imagem'
+                          className='object-cover w-10 h-10 ring-slate-500 ring-2 hover:ring-lime-400'
+                        />
+                      </a>
+                    )}
+                  </div>
                 </>
               )}
             </div>

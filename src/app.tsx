@@ -11,6 +11,7 @@ interface Note {
   content: string;
   typeNote: string;
   priority?: string;
+  imageUrl?: string;
 }
 
 export function App() {
@@ -25,13 +26,19 @@ export function App() {
     return [];
   });
 
-  function onNoteCreated(content: string, typeNote: string, priority?: string) {
+  function onNoteCreated(
+    content: string,
+    typeNote: string,
+    priority?: string,
+    imageUrl?: string
+  ) {
     const newNote = {
       id: crypto.randomUUID(),
       date: new Date(),
       content,
       typeNote,
       priority,
+      imageUrl,
     };
 
     const notesArray = [newNote, ...notes];
@@ -63,7 +70,8 @@ export function App() {
     id: string,
     newContent: string,
     newTypeNote: string,
-    newPriority?: string
+    newPriority?: string,
+    newImageUrl?: string
   ) {
     const updatedNotes = notes.map((note) => {
       if (note.id === id) {
@@ -72,6 +80,7 @@ export function App() {
           content: newContent,
           typeNote: newTypeNote,
           priority: newPriority,
+          imageUrl: newImageUrl,
         };
       }
       return note;

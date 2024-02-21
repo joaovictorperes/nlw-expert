@@ -13,13 +13,15 @@ interface NoteCardProps {
     content: string;
     typeNote: string;
     priority?: string;
+    imageUrl?: string;
   };
   onNoteDeleted: (id: string) => void;
   onNoteEdited: (
     id: string,
     newContent: string,
     newTypeNote: string,
-    newPriority?: string
+    newPriority?: string,
+    newImageUrl?: string
   ) => void;
 }
 
@@ -28,6 +30,7 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
   const [newContent, setNewContent] = useState(note.content);
   const [newTypeNote, setNewTypeNote] = useState(note.typeNote);
   const [newPriority, setNewPriority] = useState(note.priority);
+  const [newImageUrl, setNewImageUrl] = useState(note.imageUrl);
 
   const [shouldShowNotePriority, setShouldShowNotePriority] = useState(
     note.typeNote === 'Tarefa' ? true : false
@@ -39,7 +42,7 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
 
   function handleSaveEdit() {
     setIsEditing(false);
-    onNoteEdited(note.id, newContent, newTypeNote, newPriority);
+    onNoteEdited(note.id, newContent, newTypeNote, newPriority, newImageUrl);
   }
 
   function handleNoteTypeChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -62,6 +65,14 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
       sharedText = `*| [Prioridade] : ${note.priority} |* \n${sharedText}`;
     }
 
+    if (note.imageUrl) {
+      const mensagem = `Confira esta imagem: ${note.imageUrl.replace(
+        'blob:',
+        ''
+      )}`;
+      sharedText = `${sharedText} \n\n${mensagem}`;
+    }
+
     if (isMobile) {
       window.open(`whatsapp://send?text=${encodeURIComponent(sharedText)}`);
     } else {
@@ -69,6 +80,13 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
         `https://web.whatsapp.com/send?text=${encodeURIComponent(sharedText)}`
       );
     }
+  }
+
+  function handleFileUpload(event: ChangeEvent<any>) {
+    const file = event.target.files[0];
+    const fileUrl = URL.createObjectURL(file);
+
+    setNewImageUrl(fileUrl);
   }
 
   return (
@@ -105,6 +123,7 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
 
         <p className='whitespace-pre-line text-sm leading-6 text-slate-400 break-all overflow-y-auto'>
           {note.content}
+          <img src={note.imageUrl} />
         </p>
 
         <div className='absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none' />
@@ -204,15 +223,56 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
             </div>
 
             {isEditing ? (
-              <textarea
-                className='text-sm leading-6 text-slate-400 bg-transparent resize-none outline-none break-all overflow-y-scroll md:h-[40vh] max-h-[75vh] flex-1'
-                value={newContent}
-                onChange={(e) => setNewContent(e.target.value)}
-              />
+              <>
+                <textarea
+                  className='text-sm leading-6 text-slate-400 bg-transparent resize-none outline-none break-all overflow-y-scroll md:h-[40vh] max-h-[75vh] '
+                  value={newContent}
+                  onChange={(e) => setNewContent(e.target.value)}
+                />
+
+                <div className='flex gap-2 items-center'>
+                  <label
+                    htmlFor='fileInput'
+                    className='bg-slate-600 p-1 rounded-md text-sm outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400 cursor-pointer'
+                  >
+                    Selecione uma imagem
+                  </label>
+                  <input
+                    className='hidden'
+                    type='file'
+                    id='fileInput'
+                    accept='image/*'
+                    onChange={handleFileUpload}
+                  />
+                  {note.imageUrl && (
+                    <a href={note.imageUrl} target='_blank'>
+                      <img
+                        id='previewImage'
+                        src={newImageUrl}
+                        alt='Prévia da imagem'
+                        className='object-cover w-10 h-10 ring-slate-500 ring-2 hover:ring-lime-400'
+                      />
+                    </a>
+                  )}
+                </div>
+              </>
             ) : (
-              <p className='whitespace-pre-line text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh] max-h-[75vh]'>
-                {note.content}
-              </p>
+              <>
+                <p className='whitespace-pre-line text-sm leading-6 text-slate-400 break-all overflow-y-scroll md:h-[40vh] max-h-[75vh]'>
+                  {note.content}
+
+                  {note.imageUrl && (
+                    <a href={note.imageUrl} target='_blank'>
+                      <img
+                        id='previewImage'
+                        src={note.imageUrl}
+                        alt='Prévia da imagem'
+                        className='m-1 object-cover w-full'
+                      />
+                    </a>
+                  )}
+                </p>
+              </>
             )}
           </div>
 
