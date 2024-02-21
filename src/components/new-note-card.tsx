@@ -155,8 +155,8 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
                   .
                 </p>
               ) : (
-                <div>
-                  <div className='flex mb-4 justify-between'>
+                <>
+                  <div className='flex justify-between'>
                     <div className='flex gap-5'>
                       <select
                         defaultValue='Nota Simples'
@@ -223,7 +223,7 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
                     onChange={handleContentChanged}
                     value={content}
                   />
-                </div>
+                </>
               )}
             </div>
 

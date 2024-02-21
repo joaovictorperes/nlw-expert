@@ -55,17 +55,20 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
   }
 
   function shareOnWhatsApp() {
-    let textoCompartilhado = `*| [Tipo] : ${note.typeNote} |* \n\nNota: ${note.content}`;
+    let isMobile = window.innerWidth <= 768;
+    let sharedText = `*| [Tipo] : ${note.typeNote} |* \n\nNota: ${note.content}`;
 
     if (note.typeNote === 'Tarefa') {
-      textoCompartilhado = `*| [Prioridade] : ${note.priority} |* \n${textoCompartilhado}`;
+      sharedText = `*| [Prioridade] : ${note.priority} |* \n${sharedText}`;
     }
 
-    window.open(
-      `https://web.whatsapp.com/send?text=${encodeURIComponent(
-        textoCompartilhado
-      )}`
-    );
+    if (isMobile) {
+      window.open(`whatsapp://send?text=${encodeURIComponent(sharedText)}`);
+    } else {
+      window.open(
+        `https://web.whatsapp.com/send?text=${encodeURIComponent(sharedText)}`
+      );
+    }
   }
 
   return (

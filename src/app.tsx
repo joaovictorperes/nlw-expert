@@ -3,6 +3,7 @@ import logo from './assets/logo-nlw-expert.svg';
 import { NewNoteCard } from './components/new-note-card';
 import { NoteCard } from './components/note-card';
 import { toast } from 'sonner';
+import { Zap } from 'lucide-react';
 
 interface Note {
   id: string;
@@ -91,7 +92,20 @@ export function App() {
 
   return (
     <div className='mx-auto max-w-6xl my-10 space-y-6 px-5'>
-      <img src={logo} alt='NLW Expert' />
+      <div className='flex gap-5  text-sm'>
+        <img src={logo} alt='NLW Expert' />
+        <p className='flex gap-1  items-center text-slate-300'>
+          Feito por
+          <a
+            href='https://github.com/joaovictorperes/nlw-expert'
+            target='_blank'
+            className='flex gap-1 items-center text-green-400 hover:text-green-300 '
+          >
+            João Victor Peres
+            <Zap className='size-5 text-green-400 hover:text-green-300 ' />
+          </a>
+        </p>
+      </div>
       <form className='w-full'>
         <input
           type='text'

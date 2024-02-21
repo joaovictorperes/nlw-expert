@@ -1,30 +1,41 @@
-# React + TypeScript + Vite
+# Notes App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este é um projeto desenvolvido durante a NLW Expert utilizando ReactJS para criar um aplicativo de notas.
 
-Currently, two official plugins are available:
+O App oferece uma maneira fácil e eficaz de criar, editar e gerenciar suas notas de forma digital, desenvolvido utilizando as mais recentes tecnologias web para fornecer uma experiência de usuário moderna e responsiva.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+No momento é possível criar as notas de duas formas: digitando texto ou gravando áudio utilizando a biblioteca Web Speech API, que é posteriormente também é convertido para texto.
 
-## Expanding the ESLint configuration
+<img src="./src/assets/fullscreenPrint.png"/>
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Recursos
 
-- Configure the top-level `parserOptions` property like this:
+- **Criação de Notas:** Os usuários podem criar notas digitando texto ou gravando áudio.
+- **Edição de Notas:** Foi implementado a funcionalidade de edição de notas para que os usuários possam modificar o seu conteúdo, tipo e prioridade.
+- **Exclusão de Notas:** Os usuários podem excluir notas localmente.
+- **Campos Adicionais:** Foram adicionados campos de tipo e prioridade para cada nota, permitindo uma categorização mais detalhada.
+- **Compartilhamento:** Uso da biblioteca `react-share` para facilitar o compartilhamento das notas via WhatsApp, possibilitando o encaminhamento de seu conteúdo tipo e prioridade.
+- **Estilização:** A TailwindCSS foi utilizada par estilização do aplicativo, garantindo uma aparência moderna e responsiva.
+- **Tratamento de Datas:** Uso da biblioteca `date-fns` para manipulação e formatação de datas, considerando o dia e hora da criação de uma nota, por exemplo.
+- **Notificações Personalizadas:** Com uso da biblioteca `sonner`, foi possível notificar o usuário após diversas ações no aplicativo, como criar, excluir, editar uma nota ou ao não realizar o preenchimento esperado.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Tecnologias Utilizadas
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- ReactJS
+- Web Speech API
+- TailwindCSS
+- date-fns
+- react-share
+- radix
+- sonner
+
+## Como Usar
+
+1. Clone o repositório.
+2. Instale as dependências utilizando `npm install`.
+3. Inicie o servidor de desenvolvimento com `npm run dev`.
+4. Acesse o aplicativo em seu navegador.
+
+## Resultado
+
+O aplicativo Notas App também está disponível online, clicando [aqui](https://nlw-expert-notes-app.vercel.app/) você o resultado pode ser conferido.
