@@ -65,14 +65,6 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
       sharedText = `*| [Prioridade] : ${note.priority} |* \n${sharedText}`;
     }
 
-    if (note.imageUrl) {
-      const mensagem = `Confira esta imagem: ${note.imageUrl.replace(
-        'blob:',
-        ''
-      )}`;
-      sharedText = `${sharedText} \n\n${mensagem}`;
-    }
-
     if (isMobile) {
       window.open(`whatsapp://send?text=${encodeURIComponent(sharedText)}`);
     } else {
@@ -235,7 +227,7 @@ export function NoteCard({ note, onNoteDeleted, onNoteEdited }: NoteCardProps) {
                     htmlFor='fileInput'
                     className='bg-slate-600 p-1 rounded-md text-sm outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400 cursor-pointer'
                   >
-                    Selecione uma imagem
+                    Insira uma imagem
                   </label>
                   <input
                     className='hidden'

@@ -18,6 +18,7 @@ No momento é possível criar as notas de duas formas: digitando texto ou gravan
 - **Estilização:** A TailwindCSS foi utilizada par estilização do aplicativo, garantindo uma aparência moderna e responsiva.
 - **Tratamento de Datas:** Uso da biblioteca `date-fns` para manipulação e formatação de datas, considerando o dia e hora da criação de uma nota, por exemplo.
 - **Notificações Personalizadas:** Com uso da biblioteca `sonner`, foi possível notificar o usuário após diversas ações no aplicativo, como criar, excluir, editar uma nota ou ao não realizar o preenchimento esperado.
+- **Inserção de imagem:** Para cada nota pode ser adicionada uma imagem como complemento. No momento, essa imagem não é enviada para o WhatsApp ao compartilhar.
 
 ## Tecnologias Utilizadas
 
