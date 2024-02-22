@@ -51,6 +51,7 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
 
     setContent('');
     setshouldShowOnboarding(true);
+    // imageUrl && setImageUrl('');
 
     toast.success('Nota criada com sucesso!');
   }
